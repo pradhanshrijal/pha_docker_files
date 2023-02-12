@@ -1,0 +1,4 @@
+**/docker_share/tutorials/python_tutorials/pytorch/data/
+**/docker_share/tutorials/python_tutorials/pytorch/runs/
+*.pth
+*.pt
