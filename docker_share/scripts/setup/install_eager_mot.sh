@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # File Tested with CUDA 10.0 in Ubuntu 18.04
+# Input is the name of the Conda Container - ex: eager_conda
 
 # To Change variables and environments, find all instance in the file and repalce them
-export USER=aito
-export EXT_DATA_PATH=/media/$USER/Samsung_T5/Aitonomi/ACV/
-export SCRIPTS_FOLDER=/home/$USER/docker_share/
-export SOFTWARE_PARENT_FOLDER=/home/$USER/Softwares/
+export EXT_DATA_PATH=/media/$USER/Samsung_T5/Aitonomi/ACV
+export SCRIPTS_FOLDER=/home/$USER/docker_share/setup
+export SOFTWARE_PARENT_FOLDER=/home/$USER/Softwares
 export EAGER_CONDA=$1
 
 # Download EagerMOT Packages

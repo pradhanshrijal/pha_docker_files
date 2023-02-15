@@ -2,3 +2,4 @@
 **/docker_share/tutorials/python_tutorials/pytorch/runs/
 *.pth
 *.pt
+*.deb

@@ -1,32 +1,35 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t pha-envs:pha-22 -f docker_envs/pha_22/Dockerfile --no-cache .
-# 2. Run Docker Image
-# docker run -d --name pha-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha --gpus all -it pha-envs:pha-22 /bin/bash
+# docker build -t pha-envs:pha-22 -f envs/pha_22/Dockerfile --no-cache .
+# 2. Run Docker Image (Execute in the parent directory)
+# xhost +local:docker
+# docker run -d --name pha-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=QT_X11_NO_MITSHM=1 --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-22 /bin/bash
+# or
+# docker compose -f envs/pha_22/docker-compose.yaml up -d
 
 # Declare VARIABLES
+ARG IMAGE_NAME=nvidia/cuda
+ARG IMAGE_VERSION=11.7.0-devel-ubuntu22.04
+ARG DEBIAN_FRONTEND=noninteractive
+
+FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
+FROM base as base-amd64
+
 ENV NV_USERNAME=pha
 ENV NV_CUDA_VERSION_NUMBER=11.7
 ENV NV_UBUNTU_VERSION=2204
 ENV NV_CUDNN_VERSION 8.5.0.96
 ENV NV_CUDNN_PACKAGE_NAME libcudnn8
 
-ARG IMAGE_NAME=nvidia/cuda
-ARG IMAGE_VERSION=11.7.0-devel-ubuntu22.04
-ARG DEBIAN_FRONTEND=noninteractive
+ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
+ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
 # ---------------------------------------------------------
-
-FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
-FROM base as base-amd64
-
 # Declare CUDA Environments
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
 ENV NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
-ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
-ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
 
 ENV NV_CUDNN_PACKAGE_VERSION ${NV_CUDNN_VERSION}-1
 
@@ -120,6 +123,10 @@ RUN sudo apt install cmake g++ make -y
 
 ## Install Conda
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_conda.sh"]
+##
+
+## Install ROS Humble
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME}"]
 ##
 
 WORKDIR "/home/${NV_USERNAME}"
