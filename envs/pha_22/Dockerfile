@@ -23,6 +23,8 @@ ENV NV_CUDNN_PACKAGE_NAME libcudnn8
 
 ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
+
+ENV NV_ROS_VERSION=humble
 # ---------------------------------------------------------
 # Declare CUDA Environments
 ENV TZ=Europe/Berlin
@@ -72,12 +74,12 @@ RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
 COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
-RUN echo "cd /home/${NV_USERNAME}" >> /root/.bashrc
-RUN echo "su ${NV_USERNAME}" >> /root/.bashrc
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" \
+RUN echo -e "\n # Setup" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN echo "export USER=${NV_USERNAME}" \
+            >> /home/${NV_USERNAME}/.bashrc
+RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
+RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}/.bashrc
 RUN echo "${NV_USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -126,7 +128,8 @@ RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_conda.sh"]
 ##
 
 ## Install ROS Humble
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
 
 WORKDIR "/home/${NV_USERNAME}"

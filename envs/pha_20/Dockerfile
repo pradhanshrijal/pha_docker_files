@@ -72,12 +72,12 @@ RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
 COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
-RUN echo "cd /home/${NV_USERNAME}" >> /root/.bashrc
-RUN echo "su ${NV_USERNAME}" >> /root/.bashrc
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" \
+RUN echo -e "\n # Setup" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN echo "export USER=${NV_USERNAME}" \
+            >> /home/${NV_USERNAME}/.bashrc
+RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
+RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}/.bashrc
 RUN echo "${NV_USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers

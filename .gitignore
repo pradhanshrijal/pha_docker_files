@@ -1,3 +1,4 @@
 *.pth
 *.pt
 *.deb
+**/docker_share/git_pkgs
