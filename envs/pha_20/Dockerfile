@@ -3,7 +3,7 @@
 # docker build -t pha-envs:pha-20 -f envs/pha_20/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker run -d --name pha-20 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-20 /bin/bash
+# docker run -d --name pha-20 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-20 /bin/bash
 # or
 # docker compose -f envs/pha_20/docker-compose.yaml up -d
 

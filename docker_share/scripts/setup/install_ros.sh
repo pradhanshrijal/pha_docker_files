@@ -44,5 +44,7 @@ echo -e "\n # Colon" >> /home/$1/.bashrc
 echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> /home/$1/.bashrc
 echo "export _colcon_cd_root=/opt/ros/$2/" >> /home/$1/.bashrc
 echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/$1/.bashrc
+echo -e "\n # Venv" >> /home/$1/.bashrc
+echo -e "\n # source /home/$1/ros2_ws/venv/bin/activate" >> /home/$1/.bashrc
 cd /home/$1
-souce /home/$1/.bashrc
+source /home/$1/.bashrc

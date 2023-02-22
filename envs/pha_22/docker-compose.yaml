@@ -8,6 +8,8 @@ services:
     image: pha-envs:pha-22
     container_name: pha-22
     network_mode: host
+    runtime: nvidia
+    privileged: true
     environment:
       - DISPLAY=$DISPLAY
       - NVIDIA_VISIBLE_DEVICES=all

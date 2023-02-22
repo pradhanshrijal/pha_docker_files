@@ -3,7 +3,7 @@
 # docker build -t pha-envs:pha-22 -f envs/pha_22/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker run -d --name pha-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=QT_X11_NO_MITSHM=1 --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-22 /bin/bash
+# docker run -d --name pha-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-22 /bin/bash
 # or
 # docker compose -f envs/pha_22/docker-compose.yaml up -d
 
@@ -109,6 +109,7 @@ RUN curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | \
 RUN sudo add-apt-repository "deb https://download.sublimetext.com/ apt/stable/"
 RUN sudo apt update
 RUN sudo apt install sublime-text -y
+RUN sudo cp /etc/apt/trusted.gpg /etc/apt/trusted.gpg.d
 
 # Install based on scripts
 WORKDIR "${NV_SOFTWARES_PATH}"
@@ -129,7 +130,7 @@ RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_conda.sh"]
 
 ## Install ROS Humble
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
+# RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
 
 WORKDIR "/home/${NV_USERNAME}"
