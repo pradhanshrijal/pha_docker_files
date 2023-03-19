@@ -21,7 +21,7 @@ sudo apt install ros-dev-tools -y
 
 sudo apt install python3-colcon-common-extensions -y
 
-echo -e "\n # ROS 2" >> /home/$1/.bashrc
+echo -e "\n# ROS 2" >> /home/$1/.bashrc
 echo "source /opt/ros/$2/setup.bash" >> /home/$1/.bashrc
 source /opt/ros/$2/setup.bash
 mkdir -p /home/$1/ros2_ws/src
@@ -40,11 +40,11 @@ cd /home/$1/ros2_ws
 rosdep install -y --from-paths src --ignore-src --rosdistro $2 # $ROS_DISTRO
 colcon build --symlink-install
 echo "source /home/$1/ros2_ws/install/setup.bash" >> /home/$1/.bashrc
-echo -e "\n # Colon" >> /home/$1/.bashrc
+echo -e "\n# Colon" >> /home/$1/.bashrc
 echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> /home/$1/.bashrc
 echo "export _colcon_cd_root=/opt/ros/$2/" >> /home/$1/.bashrc
 echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/$1/.bashrc
-echo -e "\n # Venv" >> /home/$1/.bashrc
-echo -e "\n # source /home/$1/ros2_ws/venv/bin/activate" >> /home/$1/.bashrc
+echo -e "\n# Venv" >> /home/$1/.bashrc
+echo -e "\n# source /home/$1/ros2_ws/venv/bin/activate" >> /home/$1/.bashrc
 cd /home/$1
 source /home/$1/.bashrc

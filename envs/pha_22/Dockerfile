@@ -74,7 +74,7 @@ RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
 COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo -e "\n # Setup" \
+RUN echo -e "\n# Setup" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN echo "export USER=${NV_USERNAME}" \
             >> /home/${NV_USERNAME}/.bashrc

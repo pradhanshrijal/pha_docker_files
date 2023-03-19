@@ -2,3 +2,7 @@
 *.pt
 *.deb
 **/docker_share/git_pkgs
+**/docker_share/tests
+*.png
+*.jpg
+*.jpeg
