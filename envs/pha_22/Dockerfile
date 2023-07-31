@@ -70,8 +70,8 @@ RUN mkdir ${NV_SCRIPTS_PATH}
 RUN mkdir ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
 
-RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
-COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
+#RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
+#COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
 RUN echo -e "\n# Setup" \
