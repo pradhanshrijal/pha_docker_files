@@ -23,6 +23,8 @@ ENV NV_CUDNN_PACKAGE_NAME libcudnn8
 
 ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
+
+ENV NV_ROS_VERSION=foxy
 # ---------------------------------------------------------
 # Declare CUDA Environments
 ENV TZ=Europe/Berlin
@@ -68,11 +70,11 @@ RUN mkdir ${NV_SCRIPTS_PATH}
 RUN mkdir ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
 
-RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
-COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
+#RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
+#COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo -e "\n # Setup" \
+RUN echo -e "\n# Setup" \
             >> /home/${NV_USERNAME}/.bashrc
 RUN echo "export USER=${NV_USERNAME}" \
             >> /home/${NV_USERNAME}/.bashrc
@@ -107,6 +109,7 @@ RUN curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | \
 RUN sudo add-apt-repository "deb https://download.sublimetext.com/ apt/stable/"
 RUN sudo apt update
 RUN sudo apt install sublime-text -y
+RUN sudo cp /etc/apt/trusted.gpg /etc/apt/trusted.gpg.d
 
 # Install based on scripts
 WORKDIR "${NV_SOFTWARES_PATH}"
@@ -123,6 +126,11 @@ RUN sudo apt install cmake g++ make -y
 
 ## Install Conda
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_conda.sh"]
+##
+
+## Install ROS Humble
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+# RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
 
 WORKDIR "/home/${NV_USERNAME}"
