@@ -1,9 +1,9 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t pha-envs:pha-20 -f envs/pha_20/Dockerfile --no-cache .
+# docker build -t pha-envs/pha-20:0.1.0 -f envs/pha_20/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker run -d --name pha-20 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs:pha-20 /bin/bash
+# docker run -d --name pha-20 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs/pha-20:0.1.0 /bin/bash
 # or
 # docker compose -f envs/pha_20/docker-compose.yaml up -d
 
@@ -25,11 +25,14 @@ ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
 
 ENV NV_ROS_VERSION=foxy
+## If you change any variables, don't forge to check the script as well
+## script is => docker_share/scripts/setup/variables_install_env.sh
 # ---------------------------------------------------------
-# Declare CUDA Environments
+# Declare Time Zones
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Declare CUDA Environments
 ENV NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
 ENV NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
 
@@ -69,6 +72,8 @@ RUN mkdir ${NV_SCRIPTS_PATH}
 ## Copy Scripts
 RUN mkdir ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
+RUN mkdir ${NV_SCRIPTS_PATH}/install
+COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
 
 #RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
 #COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
@@ -100,22 +105,14 @@ RUN sudo apt install net-tools python3 python3-pip \
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install virtualenv
 
-# Setup Sublime Text:
-RUN sudo apt update
-RUN sudo apt install apt-transport-https ca-certificates curl \
-                        software-properties-common -y
-RUN curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | \
-        sudo apt-key add -
-RUN sudo add-apt-repository "deb https://download.sublimetext.com/ apt/stable/"
-RUN sudo apt update
-RUN sudo apt install sublime-text -y
-RUN sudo cp /etc/apt/trusted.gpg /etc/apt/trusted.gpg.d
-
 # Install based on scripts
 WORKDIR "${NV_SOFTWARES_PATH}"
 ## CUDA Paths
 RUN echo "source ${NV_SCRIPTS_PATH}/setup/cuda_paths.sh ${NV_CUDA_FOLDER}" >> /home/${NV_USERNAME}/.bashrc 
 ##
+
+## Install Sublime Text:
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_sublimetext.sh"]
 
 # Install apt packages
 RUN sudo apt install tmux nautilus -y
@@ -125,12 +122,13 @@ RUN sudo apt install cmake g++ make -y
 ##
 
 ## Install Conda
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_conda.sh"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_conda.sh"]
 ##
 
 ## Install ROS Humble
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
-# RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/setup/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
+RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}}/.bashrc"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+# RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
 
 WORKDIR "/home/${NV_USERNAME}"
