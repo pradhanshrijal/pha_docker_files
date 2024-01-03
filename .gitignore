@@ -1,7 +1,6 @@
 *.pth
 *.pt
 *.deb
-**/docker_share/git_pkgs
 **/docker_share/tests
 **/docker_share/tutorials
 *.png

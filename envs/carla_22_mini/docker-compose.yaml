@@ -1,0 +1,33 @@
+# Run Docker Image (Execute in the parent directory)
+# xhost +local:docker
+# docker-compose -f envs/pha_22_mini/docker-compose.yaml up -d
+version: '3'
+
+services:
+  carla-22-mini:
+    image: pha-envs:carla-22-mini
+    container_name: carla-22-mini
+    network_mode: host
+    runtime: nvidia
+    privileged: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - QT_X11_NO_MITSHM=1
+    shm_size: 16gb
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share
+      - /media/${USER}:/media/pha
+      - /dev:/dev
+    tty: true
+    stdin_open: true
+    #entrypoint: [ "/bin/bash", "-c" ]
