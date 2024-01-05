@@ -22,6 +22,7 @@ ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
 
 ENV NV_ROS_VERSION=humble
+ENV NV_CARLA_VERSION=0.9.15
 ## If you change any variables, don't forge to check the script as well
 ## script is => docker_share/scripts/setup/variables_install_env.sh
 # ---------------------------------------------------------
@@ -95,7 +96,7 @@ RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros_mini.sh $
 
 ## Install Carla Dependencies
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_carla_deps.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_carla_deps.sh ${NV_USERNAME} ${NV_ROS_VERSION} ${NV_CARLA_VERSION}"]
 
 RUN ["/bin/bash", "-c", "rm -rf /home/${NV_USERNAME}/.cache/*"]
 
