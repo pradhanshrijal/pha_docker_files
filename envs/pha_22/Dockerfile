@@ -74,10 +74,10 @@ RUN mkdir ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
 RUN mkdir ${NV_SCRIPTS_PATH}/install
 COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
-RUN mkdir ${NV_SCRIPTS_PATH}/functions
-COPY docker_share/scripts/functions ${NV_SCRIPTS_PATH}/functions
-RUN mkdir ${NV_SCRIPTS_PATH}/vars
-COPY docker_share/scripts/vars ${NV_SCRIPTS_PATH}/vars
+#RUN mkdir ${NV_SCRIPTS_PATH}/functions
+#COPY docker_share/scripts/functions ${NV_SCRIPTS_PATH}/functions
+#RUN mkdir ${NV_SCRIPTS_PATH}/vars
+#COPY docker_share/scripts/vars ${NV_SCRIPTS_PATH}/vars
 
 #RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
 #COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
