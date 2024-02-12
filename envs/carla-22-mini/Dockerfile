@@ -1,61 +1,39 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t pha-envs/pha-20:0.1.0 -f envs/pha_20/Dockerfile --no-cache .
+# docker build -t phaenvs/carla-22-mini:0.1.0 -f envs/carla-22-mini/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker run -d --name pha-20 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all --env=DISPLAY --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it pha-envs/pha-20:0.1.0 /bin/bash
+# docker run -d --name carla-22-mini -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/carla-22-mini:0.1.0 /bin/bash
 # or
-# docker compose -f envs/pha_20/docker-compose.yaml up -d
+# docker compose -f envs/carla-22-mini/docker-compose.yaml up -d
 
 # Declare VARIABLES
 ARG IMAGE_NAME=nvidia/cuda
-ARG IMAGE_VERSION=11.3.0-devel-ubuntu20.04
+ARG IMAGE_VERSION=11.7.1-devel-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
 FROM base as base-amd64
 
 ENV NV_USERNAME=pha
-ENV NV_CUDA_VERSION_NUMBER=11.3
-ENV NV_UBUNTU_VERSION=2004
-ENV NV_CUDNN_VERSION 8.2.0.53
-ENV NV_CUDNN_PACKAGE_NAME libcudnn8
+ENV NV_UBUNTU_VERSION=2204
 
 ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
 
-ENV NV_ROS_VERSION=foxy
+ENV NV_ROS_VERSION=humble
+ENV NV_CARLA_VERSION=0.9.15
 ## If you change any variables, don't forge to check the script as well
 ## script is => docker_share/scripts/setup/variables_install_env.sh
 # ---------------------------------------------------------
-# Declare Time Zones
+# Declare Time Zone
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# Declare CUDA Environments
-ENV NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
-ENV NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
-
-ENV NV_CUDNN_PACKAGE_VERSION ${NV_CUDNN_VERSION}-1
-
-ENV NV_CUDNN_PACKAGE ${NV_CUDNN_PACKAGE_NAME}=${NV_CUDNN_PACKAGE_VERSION}+${NV_CUDA_VERSION}
-ENV NV_CUDNN_PACKAGE_DEV ${NV_CUDNN_PACKAGE_NAME}-dev=${NV_CUDNN_PACKAGE_VERSION}+${NV_CUDA_VERSION}
 
 # Update and install basics
 RUN apt update && apt upgrade -y
 RUN apt install sudo -y
-RUN sudo apt install --no-install-recommends wget -y
-
-RUN sudo apt install -y --no-install-recommends \
-        ${NV_CUDNN_PACKAGE} \
-        ${NV_CUDNN_PACKAGE_DEV}
-
-RUN sudo apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
-RUN rm -rf /var/lib/apt/lists/*
-
-# Install vim editor
-RUN sudo apt update
-RUN sudo apt install vim -y
+RUN sudo apt-get install --no-install-recommends wget -y
 
 # Setup user
 SHELL ["/bin/bash", "-c"]
@@ -79,9 +57,6 @@ COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
 #RUN mkdir ${NV_SCRIPTS_PATH}/vars
 #COPY docker_share/scripts/vars ${NV_SCRIPTS_PATH}/vars
 
-#RUN mkdir ${NV_SCRIPTS_PATH}/eagermot
-#COPY docker_share/scripts/eagermot/ ${NV_SCRIPTS_PATH}/eagermot/
-
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
 RUN echo -e "\n# Setup" \
             >> /home/${NV_USERNAME}/.bashrc
@@ -101,13 +76,14 @@ USER ${NV_USERNAME}
 
 RUN mkdir ${NV_SOFTWARES_PATH}
 
-# Setup Python
-RUN sudo apt update
-RUN sudo apt install net-tools python3 python3-pip \
-                        vim python3-pyqt5 git git-lfs iputils-ping -y
+# Setup Programmes
+RUN sudo apt-get update
+RUN sudo apt-get install python3 python3-pip \
+                        vim tmux python3-pyqt5 git git-lfs -y
 #RUN python2 -m pip install --upgrade pip
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install virtualenv
+RUN python3 -m pip install supervisor
+RUN python3 -m pip install numpy==1.23.1
 
 # Install based on scripts
 WORKDIR "${NV_SOFTWARES_PATH}"
@@ -115,28 +91,25 @@ WORKDIR "${NV_SOFTWARES_PATH}"
 RUN echo "source ${NV_SCRIPTS_PATH}/setup/cuda_paths.sh ${NV_CUDA_FOLDER}" >> /home/${NV_USERNAME}/.bashrc 
 ##
 
-## Install Sublime Text:
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_sublimetext.sh"]
-
-# Install apt packages
-RUN sudo apt install tmux nautilus -y
-
 ## Upgrade Cmake
-RUN sudo apt install cmake g++ make -y
+RUN sudo apt-get install cmake g++ make -y
 ##
 
-## Install Conda
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_conda.sh"]
+## Install Vulkan
+RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+RUN sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+RUN sudo apt update
+RUN sudo apt install vulkan-sdk -y
 ##
 
 ## Install ROS Humble
-RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
-# RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
-##
+RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros_mini.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+
+## Install Carla Dependencies
+RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_carla_deps.sh ${NV_USERNAME} ${NV_ROS_VERSION} ${NV_CARLA_VERSION}"]
+
+RUN ["/bin/bash", "-c", "rm -rf /home/${NV_USERNAME}/.cache/*"]
 
 WORKDIR "/home/${NV_USERNAME}"
-
-## Source Conda
-# RUN echo "source ${NV_SCRIPTS_PATH}/start_conda_local.sh" >> /home/${NV_USERNAME}/.bashrc
-##
