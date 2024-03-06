@@ -9,7 +9,7 @@
 
 # Declare VARIABLES
 ARG IMAGE_NAME=nvidia/cuda
-ARG IMAGE_VERSION=11.3.0-devel-ubuntu20.04
+ARG IMAGE_VERSION=11.3.1-devel-ubuntu20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
@@ -129,8 +129,8 @@ RUN sudo apt install cmake g++ make -y
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_conda.sh"]
 ##
 
-## Install ROS Humble
-RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}}/.bashrc"]
+## Install ROS Foxy
+RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
 # RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
