@@ -20,6 +20,7 @@ ENV NV_CUDA_VERSION_NUMBER=11.7
 ENV NV_UBUNTU_VERSION=2204
 ENV NV_CUDNN_VERSION 8.5.0.96
 ENV NV_CUDNN_PACKAGE_NAME libcudnn8
+ENV NV_TRT=8.6.1
 
 ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
 ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
@@ -124,6 +125,9 @@ RUN sudo apt install tmux nautilus -y
 ## Upgrade Cmake
 RUN sudo apt install cmake g++ make -y
 ##
+
+# Install TensorRT
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_tensorrt.sh ${NV_UBUNTU_VERSION} ${NV_TRT}"]
 
 ## Install Conda
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_conda.sh"]
