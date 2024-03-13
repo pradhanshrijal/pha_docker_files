@@ -5,7 +5,7 @@
 # xhost +local:docker
 # docker run -d --name pha-22-mini -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/pha-22-mini:0.1.1 /bin/bash
 # or
-# docker compose -f envs/pha-22-mini-mini/docker-compose.yaml up -d
+# docker compose -f envs/pha-22-mini/docker-compose.yaml up -d
 
 # Declare VARIABLES
 ARG IMAGE_NAME=nvidia/cuda

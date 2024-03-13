@@ -1,0 +1,23 @@
+# Run Docker Image (Execute in the parent directory)
+# xhost +local:docker
+# docker-compose -f envs/pha-22-mini/docker-compose-cpu.yaml up -d
+version: '3'
+
+services:
+  jekyll-22:
+    image: phaenvs/pha-22-mini
+    container_name: pha-22-mini
+    network_mode: host
+    privileged: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+    shm_size: 16gb
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share
+      - /media/${USER}:/media/pha
+      - /dev:/dev
+    tty: true
+    stdin_open: true
+    #entrypoint: [ "/bin/bash", "-c" ]
