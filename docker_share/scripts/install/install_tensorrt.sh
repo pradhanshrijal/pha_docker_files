@@ -18,3 +18,4 @@ sudo apt install uff-converter-tf -y
 python3 -m pip install onnx
 sudo apt install onnx-graphsurgeon -y
 rm -rf nv-tensorrt-local-repo-ubuntu${IN_UBUNTU}-${IN_TRT}-cuda-${IN_CUDA}_1.0-1_amd64.deb
+sudo rm -rf /etc/apt/sources.list.d/nv-tensorrt-local-ubuntu2204-8.6.1-cuda-11.8.list
