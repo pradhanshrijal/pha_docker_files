@@ -1,0 +1,33 @@
+# Commands
+# 1. Create Docker Image (Execute in the parent directory)
+# docker build -t phaenvs/pha-22:custom-user -f envs/custom-user/Dockerfile --no-cache .
+# 2. Run Docker Image (Execute in the parent directory)
+# xhost +local:docker
+# docker run -d --name pha-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/pha-22:0.1.0 /bin/bash
+# or
+# docker compose -f envs/pha-22/docker-compose.yaml up -d
+
+# Declare VARIABLES
+ARG IMAGE_NAME=phaenvs/pha-22
+ARG IMAGE_VERSION=latest
+ARG DEBIAN_FRONTEND=noninteractive
+
+FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
+FROM base as base-amd64
+
+USER root
+
+ARG USERNAME=devuser
+ARG UID=${UID}
+ARG GID=${GID}
+
+# Create new user and home directory
+RUN groupadd --gid $GID $USERNAME \
+ && useradd --uid ${UID} --gid ${GID} --create-home ${USERNAME} \
+ && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+ && chmod 0440 /etc/sudoers.d/${USERNAME} \
+ && mkdir -p /home/${USERNAME} \
+ && chown -R ${UID}:${GID} /home/${USERNAME}
+
+ USER ${USERNAME}
+ WORKDIR "/home/${USERNAME}"
