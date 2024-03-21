@@ -8,21 +8,19 @@
 # docker compose -f envs/pha-22/docker-compose.yaml up -d
 
 # Declare VARIABLES
-ARG IMAGE_NAME=phaenvs/pha-22
-ARG IMAGE_VERSION=latest
+ARG IMAGE_NAME=ubuntu
+ARG IMAGE_VERSION=22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
 FROM base as base-amd64
 
-USER root
-
 ARG USERNAME=devuser
 ARG UID=${UID}
 ARG GID=${GID}
 
-# Remove User
-RUN userdel pha
+RUN apt update && apt upgrade -y
+RUN apt install sudo
 
 # Create new user and home directory
 RUN groupadd --gid $GID $USERNAME \
