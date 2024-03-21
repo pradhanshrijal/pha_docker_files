@@ -4,12 +4,12 @@ ENV_FILE="docker_scripts/compose-file.env"
 DOC_FILE="docker_scripts/docker-compose.yaml"
 DOC_COMMAND="up -d"
 
-while getopts c:e:f: flag
+while getopts e:f:o: flag
 do
     case "${flag}" in
-        c) DOC_COMMAND=${OPTARG};;
         e) ENV_FILE=${OPTARG};;
         f) DOC_FILE=${OPTARG};;
+        o) DOC_COMMAND=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
     esac
 done
