@@ -27,7 +27,7 @@ services:
               capabilities: [gpu]
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share
+      - ${SSI_PATH}:/home/pha/docker_share
       - /media/${USER}:/media/pha
       - /dev:/dev
     tty: true

@@ -9,14 +9,14 @@ CUSTOM_TAG="custom-${USERNAME}"
 UID_VAR=$(id -u)
 GID_VAR=$(id -g)
 
-while getopts d:g:i:m:s:t:u: flag
+while getopts a:d:g:i:m:t:u: flag
 do
     case "${flag}" in
+        a) CUSTOM_TAG=${OPTARG};;
         d) UID_VAR=${OPTARG};;
         g) GID_VAR=${OPTARG};;
         i) DOC_IMG=${OPTARG};;
         m) CUSTOM_NAME=${OPTARG};;
-        s) CUSTOM_TAG=${OPTARG};;
         t) DOC_TAG=${OPTARG};;
         u) USERNAME=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
