@@ -16,9 +16,15 @@ cd pha_docker_files
 
 This can also be done with a script:
 ```bash
-cd /home/${USER}
-mkdir schreibtisch
-cd schreibtisch
-git clone https://github.com/pradhanshrijal/pha_docker_files --recursive
-cd pha_docker_files
+https://github.com/pradhanshrijal/pha_docker_files/blob/master/docker_share/scripts/setup/setup_ssi.sh
+source setup_ssi.sh
 ```
+
+# Usage
+
+Easy sample run with docker compose:
+```bash
+./docker_scripts/run-compose.sh
+```
+
+For full usage see 
