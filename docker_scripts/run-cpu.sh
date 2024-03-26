@@ -3,12 +3,14 @@
 DOC_IMG="phaenvs/pha-22"
 CONT_NAME="pha-22"
 DOC_TAG="latest"
+SSI_PATH="/home/${USER}/schreibtisch/pha_docker_files/docker_share"
 
-while getopts i:c:t: flag
+while getopts i:c:s:t: flag
 do
     case "${flag}" in
         i) DOC_IMG=${OPTARG};;
         c) CONT_NAME=${OPTARG};;
+        s) SSI_PATH=${OPTARG};;
         t) DOC_TAG=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
     esac
@@ -21,7 +23,7 @@ docker run -d --name ${CONT_NAME} \
                 --shm-size=16gb \
                 -v /tmp/.X11-unix:/tmp/.X11-unix \
                 --network host \
-                -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share \
+                -v ${SSI_PATH}:/home/pha/docker_share \
                 -v /media/${USER}:/media/pha \
                 -v /dev:/dev \
                 -it ${DOC_IMG}:${DOC_TAG} /bin/bash

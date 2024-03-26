@@ -5,7 +5,7 @@ version: '3'
 
 services:
   jekyll-22:
-    image: phaenvs/pha-22-mini
+    image: phaenvs/pha-22:mini
     container_name: pha-22-mini
     network_mode: host
     privileged: true
