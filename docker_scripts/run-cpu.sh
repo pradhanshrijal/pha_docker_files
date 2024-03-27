@@ -5,11 +5,11 @@ CONT_NAME="pha-22"
 DOC_TAG="latest"
 SSI_PATH="/home/${USER}/schreibtisch/pha_docker_files/docker_share"
 
-while getopts i:c:s:t: flag
+while getopts c:i:s:t: flag
 do
     case "${flag}" in
-        i) DOC_IMG=${OPTARG};;
         c) CONT_NAME=${OPTARG};;
+        i) DOC_IMG=${OPTARG};;
         s) SSI_PATH=${OPTARG};;
         t) DOC_TAG=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
