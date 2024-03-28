@@ -27,10 +27,14 @@ python3 -m pip install distro
 
 sudo apt install aria2 -y
 
-cd /home/${IN_USERNAME}/ros2_ws/src
+cd /home/${IN_USERNAME}/docker_share/git_pkgs
+mkdir -p carla_ws/src
+cd carla_ws/src
 git clone --recurse-submodules https://github.com/pradhanshrijal/ros-bridge -b feature/u22-${IN_CARLA_VERSION}
 cd ..
 sudo apt install ros-$IN_ROS_VERSION-derived-object-msgs -y
 source /opt/ros/$IN_ROS_VERSION/setup.bash
 rosdep install -y --from-paths src --ignore-src --rosdistro $IN_ROS_VERSION # $ROS_DISTRO
 colcon build --symlink-install
+
+echo "source /home/${IN_USERNAME}/docker_share/git_pkgs/carla_ws/install/setup.bash" >> /home/${IN_USERNAME}/.bashrc
