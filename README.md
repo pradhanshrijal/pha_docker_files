@@ -16,7 +16,7 @@ cd pha_docker_files
 
 This can also be done with a script:
 ```bash
-https://github.com/pradhanshrijal/pha_docker_files/blob/master/docker_share/scripts/setup/setup_ssi.sh
+wget https://github.com/pradhanshrijal/pha_docker_files/blob/master/docker_share/scripts/setup/setup_ssi.sh
 source setup_ssi.sh
 ```
 
@@ -27,4 +27,4 @@ Easy sample run with docker compose:
 ./docker_scripts/run-compose.sh
 ```
 
-For full usage see 
+For full usage see [Scripts-Usage](https://github.com/pradhanshrijal/pha_docker_files/wiki/Scripts-Usage).
