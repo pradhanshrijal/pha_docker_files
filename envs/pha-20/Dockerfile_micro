@@ -123,12 +123,9 @@ RUN sudo apt install tmux nautilus -y
 RUN sudo apt install cmake g++ make -y
 ##
 
-# Install TensorRT
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_tensorrt.sh ${NV_UBUNTU_VERSION} ${NV_TRT}"]
-
 ## Install ROS Foxy
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros_mini.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
 # RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_autoware.sh /home/${NV_USERNAME}/ros2_ws"]
 ##
 

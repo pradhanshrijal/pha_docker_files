@@ -27,4 +27,4 @@ Easy sample run with docker compose:
 ./docker_scripts/run-compose.sh
 ```
 
-For full usage see [Scripts-Usage](https://github.com/pradhanshrijal/pha_docker_files/wiki/Scripts-Usage).
+For full usage see [Scripts-Usage](https://github.com/pradhanshrijal/pha_docker_files/wiki/Scripts-Usage). See [PHA-Images](https://github.com/pradhanshrijal/pha_docker_files/wiki/PHA-Images) for a list of available images.

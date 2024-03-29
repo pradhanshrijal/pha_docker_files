@@ -20,7 +20,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install ros-$IN_ROS_VERSION-desktop -y
+sudo apt -E install ros-$IN_ROS_VERSION-desktop -y
 
 sudo apt install ros-dev-tools -y
 
