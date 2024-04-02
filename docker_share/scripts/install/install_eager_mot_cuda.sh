@@ -4,7 +4,7 @@
 # Input is the name of the Conda Container - ex: eager_conda
 
 # To Change variables and environments, find all instance in the file and repalce them
-export EXT_DATA_PATH=/media/$USER/Samsung_T5/Aitonomi/ACV
+export EXT_DATA_PATH=/media/$USER/storage_drive
 export SCRIPTS_FOLDER=/home/$USER/docker_share/setup
 export SOFTWARE_PARENT_FOLDER=/home/$USER/Softwares
 export EAGER_CONDA=$1

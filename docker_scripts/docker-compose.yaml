@@ -4,7 +4,7 @@
 version: '3'
 
 services:
-  pha-dynamic:
+  pha-cont:
     image: ${DOC_IMG}:${DOC_TAG}
     container_name: ${CONT_NAME}
     env_file:
