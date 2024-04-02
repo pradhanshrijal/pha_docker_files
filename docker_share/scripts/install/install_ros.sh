@@ -20,7 +20,11 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt -E install ros-$IN_ROS_VERSION-desktop -y
+if [ "${IN_ROS_VERSION}" == "foxy" ]; then
+    sudo apt install ros-$IN_ROS_VERSION-desktop-full -y 
+else
+    sudo apt install ros-$IN_ROS_VERSION-desktop -y
+fi
 
 sudo apt install ros-dev-tools -y
 
