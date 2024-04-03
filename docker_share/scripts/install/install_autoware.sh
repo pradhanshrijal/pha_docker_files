@@ -57,6 +57,7 @@ rm -rf autoware
 cd $1
 
 source /opt/ros/$ROS_DISTRO/setup.bash
+rosdep update
 rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
 MAKEFLAGS=-j4 colcon build --parallel-workers=4 --symlink-install --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 source $1/install/setup.bash

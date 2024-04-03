@@ -21,7 +21,7 @@ sudo apt update
 sudo apt upgrade -y
 
 if [ "${IN_ROS_VERSION}" == "foxy" ]; then
-    sudo apt install ros-$IN_ROS_VERSION-desktop-full -y 
+    sudo apt install ros-$IN_ROS_VERSION-desktop -y 
 else
     sudo apt install ros-$IN_ROS_VERSION-desktop -y
 fi
