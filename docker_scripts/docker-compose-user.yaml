@@ -1,21 +1,30 @@
 # Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker-compose --verbose --env-file docker_scripts/compose-file.env -f envs/pha-22/docker-compose.yaml up -d
+# docker-compose --verbose --env-file docker_scripts/compose-file.env -f docker_scripts/docker-compose.yaml up -d
 version: '3'
 
 services:
-  pha-cont:
-    image: ${DOC_IMG}:${DOC_TAG}
+  pha-user:
+    image: ${CUSTOM_NAME}:${CUSTOM_TAG}
+    build: 
+      context: ../.
+      dockerfile: ${DOCKERFILE_PATH}
+      no_cache: true
+      args:
+        - IMAGE_NAME=${DOC_IMG}
+        - IMAGE_VERSION=${DOC_TAG}
+        - UID=${UID}
+        - GID=${GID}
+        - USERNAME=${USERNAME}
     container_name: ${CONT_NAME}
     env_file:
       - compose-file.env
-    user: ${UID}:${GID}
     network_mode: host
     runtime: nvidia
     privileged: true
     environment:
       - DISPLAY=${DISPLAY_VAR}
-      - NVIDIA_VISIBLE_DEVICES=${GPU_DEVICES}
+      - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - QT_X11_NO_MITSHM=1
     shm_size: ${SHM_SIZE}
@@ -29,12 +38,12 @@ services:
           memory: ${CPU_MEM_RES}
           devices:
             - driver: nvidia
-              device_ids: ${GPU_IDS}
+              count: 1
               capabilities: [gpu]
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ${SSI_PATH}:/home/pha/docker_share
-      - /media/${USERNAME}:/media/pha
+      - ${SSI_PATH}:/home/${USERNAME}/docker_share
+      - /media/${USERNAME}:/media/${USERNAME}
       - /dev:/dev
     tty: true
     stdin_open: true
