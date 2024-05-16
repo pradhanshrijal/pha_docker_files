@@ -25,6 +25,14 @@ services:
       - DISPLAY=${DISPLAY_VAR}
       - QT_X11_NO_MITSHM=1
     shm_size: ${SHM_SIZE}
+    deploy:
+      resources:
+        limits:
+          cpus: ${CPU_LIM}
+          memory: ${CPU_MEM_LIM}
+        reservations:
+          cpus: ${CPU_RES}
+          memory: ${CPU_MEM_RES}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${SSI_PATH}:/home/${USERNAME}/docker_share
