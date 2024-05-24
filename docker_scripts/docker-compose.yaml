@@ -20,7 +20,12 @@ services:
     shm_size: ${SHM_SIZE}
     deploy:
       resources:
+        limits:
+          cpus: ${CPU_LIM}
+          memory: ${CPU_MEM_LIM}
         reservations:
+          cpus: ${CPU_RES}
+          memory: ${CPU_MEM_RES}
           devices:
             - driver: nvidia
               count: 1
