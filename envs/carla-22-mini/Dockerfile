@@ -1,6 +1,6 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t phaenvs/carla-22-mini:0.1.0 -f envs/carla-22-mini/Dockerfile --no-cache .
+# docker build -t phaenvs/pha-22:carla-mini -f envs/carla-22-mini/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
 # docker run -d --name carla-22-mini -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/carla-22-mini:0.1.0 /bin/bash
@@ -106,7 +106,7 @@ RUN python3 -m pip install -r ${NV_SCRIPTS_PATH}/tmp/${PYTHON_REQUIREMENTS_FILE}
 # End - Setup Programmes
 
 # Install based on scripts
-WORKDIR "${NV_SOFTWARES_PATH}"
+WORKDIR ${NV_SOFTWARES_PATH}
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
 RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
 # End - Install based on scripts
