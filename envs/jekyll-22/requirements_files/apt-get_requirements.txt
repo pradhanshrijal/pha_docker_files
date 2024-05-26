@@ -1,0 +1,7 @@
+wget
+vim 
+tmux 
+cmake 
+g++ 
+make
+nautilus
