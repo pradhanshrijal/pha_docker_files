@@ -21,7 +21,7 @@ sudo apt update
 sudo apt upgrade -y
 
 if [ "${IN_ROS_VERSION}" == "foxy" ]; then
-    sudo apt install ros-$IN_ROS_VERSION-desktop -y 
+    sudo apt install ros-$IN_ROS_VERSION-ros-base ros-$IN_ROS_VERSION-rviz ros-$IN_ROS_VERSION-rqt -y
 else
     sudo apt install ros-$IN_ROS_VERSION-desktop -y
 fi

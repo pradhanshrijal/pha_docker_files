@@ -1,6 +1,6 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t phaenvs/carla-22-mini:0.1.0 -f envs/carla-22-mini/Dockerfile --no-cache .
+# docker build -t phaenvs/pha-22:carla-mini -f envs/carla-22-mini/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
 # docker run -d --name carla-22-mini -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/carla-22-mini:0.1.0 /bin/bash
@@ -15,25 +15,39 @@ ARG DEBIAN_FRONTEND=noninteractive
 FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
 FROM base as base-amd64
 
-ENV NV_USERNAME=pha
-ENV NV_UBUNTU_VERSION=2204
+ARG NV_USERNAME=pha
+ARG NV_UBUNTU_VERSION=2204
+ARG NV_CUDA_VERSION_NUMBER=11.7
 
-ENV NV_SCRIPTS_PATH=/home/${NV_USERNAME}/docker_share/scripts
-ENV NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
+ARG PROJECT_NAME=carla-22-mini
 
-ENV NV_ROS_VERSION=humble
-ENV NV_CARLA_VERSION=0.9.15
-## If you change any variables, don't forge to check the script as well
-## script is => docker_share/scripts/setup/variables_install_env.sh
+ARG APT_GET_REQUIREMENTS_FILE=apt-get_requirements.txt
+ARG PYTHON_REQUIREMENTS_FILE=python_requirements.txt
+ARG SCRIPT_REQUIREMENTS_FILE=script_requirements.sh
+
+ARG NV_SSI_PATH=/home/${NV_USERNAME}/docker_share
+ARG NV_SCRIPTS_PATH=${NV_SSI_PATH}/scripts
+ARG NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
+ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements_files
+
+ARG NV_ROS_VERSION=humble
+ARG NV_CARLA_VERSION=0.9.15
 # ---------------------------------------------------------
-# Declare Time Zone
-ENV TZ=Europe/Berlin
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Update and install basics
+# Declare Time Zone
+ARG TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#
+
+# Declare CUDA Environments
+ARG NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
+ARG NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
+#
+
+# Update and install sudo
 RUN apt update && apt upgrade -y
 RUN apt install sudo -y
-RUN sudo apt-get install --no-install-recommends wget -y
+#
 
 # Setup user
 SHELL ["/bin/bash", "-c"]
@@ -44,7 +58,7 @@ WORKDIR /home/
 RUN ["/bin/bash", "-c", "sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}"]
 WORKDIR /home/${NV_USERNAME}
 RUN ["/bin/bash", "-c", "sudo chsh -s /bin/bash ${NV_USERNAME}"]
-RUN mkdir /home/${NV_USERNAME}/docker_share
+RUN mkdir ${NV_SSI_PATH}
 RUN mkdir ${NV_SCRIPTS_PATH}
 
 ## Copy Scripts
@@ -52,20 +66,20 @@ RUN mkdir ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
 RUN mkdir ${NV_SCRIPTS_PATH}/install
 COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
-#RUN mkdir ${NV_SCRIPTS_PATH}/functions
+RUN mkdir ${NV_SCRIPTS_PATH}/tmp
+COPY ${USER_REQUIREMENTS_PATH}/${APT_GET_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
+COPY ${USER_REQUIREMENTS_PATH}/${PYTHON_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
+COPY ${USER_REQUIREMENTS_PATH}/${SCRIPT_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
+ #RUN mkdir ${NV_SCRIPTS_PATH}/functions
 #COPY docker_share/scripts/functions ${NV_SCRIPTS_PATH}/functions
 #RUN mkdir ${NV_SCRIPTS_PATH}/vars
 #COPY docker_share/scripts/vars ${NV_SCRIPTS_PATH}/vars
+RUN mkdir ${NV_SOFTWARES_PATH}
 
 RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo -e "\n# Setup" \
-            >> /home/${NV_USERNAME}/.bashrc
-RUN echo "export USER=${NV_USERNAME}" \
-            >> /home/${NV_USERNAME}/.bashrc
 RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" \
-            >> /home/${NV_USERNAME}/.bashrc
 RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}/.bashrc
+RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} ${NV_SSI_PATH}
 RUN echo "${NV_USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 ##
 
@@ -74,42 +88,32 @@ RUN ["/bin/bash", "-c", "source /root/.bashrc"]
 USER ${NV_USERNAME}
 ##
 
-RUN mkdir ${NV_SOFTWARES_PATH}
+# End - Setup user
 
 # Setup Programmes
+
+## Setup apt-get
 RUN sudo apt-get update
-RUN sudo apt-get install python3 python3-pip \
-                        vim tmux python3-pyqt5 git git-lfs -y
-#RUN python2 -m pip install --upgrade pip
+RUN sudo apt-get install --no-install-recommends -y checkinstall
+RUN xargs sudo apt-get install --no-install-recommends -y < ${NV_SCRIPTS_PATH}/tmp/${APT_GET_REQUIREMENTS_FILE}
+##
+
+## Setup Python
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install supervisor
-RUN python3 -m pip install numpy==1.23.1
+RUN python3 -m pip install -r ${NV_SCRIPTS_PATH}/tmp/${PYTHON_REQUIREMENTS_FILE}
+##
+
+# End - Setup Programmes
 
 # Install based on scripts
-WORKDIR "${NV_SOFTWARES_PATH}"
-## CUDA Paths
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/cuda_paths.sh ${NV_CUDA_FOLDER}" >> /home/${NV_USERNAME}/.bashrc 
-##
-
-## Upgrade Cmake
-RUN sudo apt-get install cmake g++ make -y
-##
-
-## Install Vulkan
-RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
-RUN sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-RUN sudo apt update
-RUN sudo apt install vulkan-sdk -y
-##
-
-## Install ROS Humble
+WORKDIR ${NV_SOFTWARES_PATH}
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_ros_mini.sh ${NV_USERNAME} ${NV_ROS_VERSION}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
+# End - Install based on scripts
 
-## Install Carla Dependencies
-RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/install/install_carla_deps.sh ${NV_USERNAME} ${NV_ROS_VERSION} ${NV_CARLA_VERSION}"]
-
+# Remove Cache
 RUN ["/bin/bash", "-c", "rm -rf /home/${NV_USERNAME}/.cache/*"]
+RUN ["/bin/bash", "-c", "rm -rf ${NV_SCRIPTS_PATH}/tmp"]
+#
 
 WORKDIR "/home/${NV_USERNAME}"
