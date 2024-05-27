@@ -41,28 +41,9 @@ ARG TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #
 
-# Declare CUDA Environments
-ENV NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
-ENV NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
-
-ENV NV_CUDNN_PACKAGE_VERSION ${NV_CUDNN_VERSION}-1
-
-ENV NV_CUDNN_PACKAGE ${NV_CUDNN_PACKAGE_NAME}=${NV_CUDNN_PACKAGE_VERSION}+${NV_CUDA_VERSION}
-ENV NV_CUDNN_PACKAGE_DEV ${NV_CUDNN_PACKAGE_NAME}-dev=${NV_CUDNN_PACKAGE_VERSION}+${NV_CUDA_VERSION}
-#
-
 # Update and install sudo
 RUN apt update && apt upgrade -y
 RUN apt install sudo -y
-#
-
-# Install CuDNN
-RUN sudo apt install -y --no-install-recommends \
-        ${NV_CUDNN_PACKAGE} \
-        ${NV_CUDNN_PACKAGE_DEV}
-
-RUN sudo apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
-RUN rm -rf /var/lib/apt/lists/*
 #
 
 # Setup user
@@ -124,7 +105,7 @@ RUN python3 -m pip install -r ${NV_SCRIPTS_PATH}/tmp/${PYTHON_REQUIREMENTS_FILE}
 # Install based on scripts
 WORKDIR ${NV_SOFTWARES_PATH}
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE} ${NV_USERNAME} ${NV_SCRIPTS_PATH} ${NV_ROS_VERSION} ${NV_CUDA_VERSION_NUMBER} ${NV_UBUNTU_VERSION} ${NV_CUDNN_VERSION} ${NV_CUDNN_PACKAGE_NAME} ${NV_TRT}"]
 # End - Install based on scripts
 
 # Remove Cache
