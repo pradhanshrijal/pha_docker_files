@@ -1,11 +1,11 @@
 #!/bin/bash
 
-REQUIREMENTS_ENVS="${PHA_HOME}/envs/pha-22/pha-22.env"
+ENV_FILE="${PHA_HOME}/envs/pha-22/pha-22.env"
 
-while getopts l: flag
+while getopts e: flag
 do
     case "${flag}" in
-        l) REQUIREMENTS_ENVS=${OPTARG};;
+        e) ENV_FILE=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
     esac
 done
