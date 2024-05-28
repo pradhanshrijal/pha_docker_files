@@ -15,6 +15,9 @@ IN_CUDNN_VERSION=${IN_CUDNN_VERSION:=8.5.0.96}
 IN_CUDNN_PACKAGE_NAME=${IN_CUDNN_PACKAGE_NAME:=libcudnn8}
 IN_TRT="${IN_TRT:=8.6.1}"
 
+IN_CUDA_VERSION=cuda-${IN_CUDA_VERSION_NUMBER}
+
+
 # Setup Display
 echo -e "\n# Setup" >> /home/${IN_USERNAME}/.bashrc
 echo "export USER=${IN_USERNAME}" >> /home/${IN_USERNAME}/.bashrc
@@ -27,7 +30,7 @@ echo "source ${IN_SCRIPTS_PATH}/setup/export_docker_paths.sh" >> /home/${IN_USER
 source ${IN_SCRIPTS_PATH}/install/install_cudnn.sh ${IN_CUDA_VERSION_VERSION} ${IN_CUDNN_VERSION} ${IN_CUDNN_PACKAGE_NAME}
 
 # CUDA Paths
-echo "source ${IN_SCRIPTS_PATH}/setup/cuda_paths.sh cuda-${IN_CUDA_VERSION_NUMBER}" >> /home/${IN_USERNAME}/.bashrc 
+echo "source ${IN_SCRIPTS_PATH}/setup/cuda_paths.sh ${IN_CUDA_VERSION}" >> /home/${IN_USERNAME}/.bashrc 
 
 # Install TensorRT
 source ${IN_SCRIPTS_PATH}/install/install_tensorrt.sh ${IN_UBUNTU_VERSION} ${IN_TRT}

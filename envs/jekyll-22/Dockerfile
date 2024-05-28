@@ -1,9 +1,9 @@
 # Commands
 # 1. Create Docker Image (Execute in the parent directory)
-# docker build -t phaenvs/jekyll-22:0.1.0 -f envs/jekyll-22/Dockerfile --no-cache .
+# docker build -t phaenvs/pha-22:jekyll-nano -f envs/jekyll-22/Dockerfile --no-cache .
 # 2. Run Docker Image (Execute in the parent directory)
 # xhost +local:docker
-# docker run -d --name jekyll-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/jekyll-22:0.1.0 /bin/bash
+# docker run -d --name jekyll-22 -e DISPLAY=$DISPLAY --env=NVIDIA_VISIBLE_DEVICES=all --env=NVIDIA_DRIVER_CAPABILITIES=all  --env=QT_X11_NO_MITSHM=1 --runtime=nvidia --privileged --shm-size=16gb -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/${USER}/schreibtisch/pha_docker_files/docker_share:/home/pha/docker_share -v /media/${USER}:/media/pha -v /dev:/dev --gpus all -it phaenvs/pha-22:jekyll-nano /bin/bash
 # or
 # docker compose -f envs/jekyll-22/docker-compose.yaml up -d
 
@@ -92,7 +92,7 @@ RUN xargs sudo apt-get install --no-install-recommends -y < ${NV_SCRIPTS_PATH}/t
 # Install based on scripts
 WORKDIR "${NV_SOFTWARES_PATH}"
 RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
+RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE} ${NV_USERNAME} ${NV_SCRIPTS_PATH}"]
 # End - Install based on scripts
 
 # Remove Cache
