@@ -59,7 +59,7 @@ RUN mkdir ${NV_SSI_PATH}
 RUN mkdir ${NV_SCRIPTS_PATH}
 
 ## Copy Scripts
-RUN mkdir ${NV_SCRIPTS_PATH}/setup
+RUN mkdir -p ${NV_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
 RUN mkdir ${NV_SCRIPTS_PATH}/install
 COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
