@@ -31,7 +31,7 @@ ARG SCRIPT_REQUIREMENTS_FILE=script_requirements.sh
 ARG NV_SSI_PATH=/home/${NV_USERNAME}/docker_share
 ARG NV_SCRIPTS_PATH=${NV_SSI_PATH}/scripts
 ARG NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
-ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements_files
+ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements
 
 ARG NV_ROS_VERSION=humble
 # ---------------------------------------------------------

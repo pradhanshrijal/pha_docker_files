@@ -28,7 +28,7 @@ ARG SCRIPT_REQUIREMENTS_FILE=script_requirements.sh
 
 ARG IN_SSI_PATH=/home/${USERNAME}/docker_share
 ARG IN_SCRIPTS_PATH=${IN_SSI_PATH}/scripts
-ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements_files
+ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements
 
 ARG IN_ROS_VERSION=humble
 #
@@ -46,10 +46,11 @@ RUN groupadd --gid $GID $USERNAME \
     && mkdir -p /home/${USERNAME} \
     && chown -R ${UID}:${GID} /home/${USERNAME}
 
+USER ${USERNAME}
 WORKDIR "/home/${USERNAME}"
 
 ## Copy Scripts
-RUN mkdir ${IN_SCRIPTS_PATH}/setup
+RUN mkdir -p ${IN_SCRIPTS_PATH}/setup
 COPY docker_share/scripts/setup ${IN_SCRIPTS_PATH}/setup
 RUN mkdir ${IN_SCRIPTS_PATH}/install
 COPY docker_share/scripts/install ${IN_SCRIPTS_PATH}/install
