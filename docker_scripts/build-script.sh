@@ -11,10 +11,10 @@ do
 done
 
 set -a
-source ${REQUIREMENTS_ENVS}
+source ${ENV_FILE}
 
 docker build -t ${DOC_IMG}:${DOC_TAG} -f ${DOCKERFILE_PATH} \
-        --build-arg="IAMGE_NAME=${IMAGE_NAME}" \
+        --build-arg="IMAGE_NAME=${IMAGE_NAME}" \
         --build-arg="IMAGE_VERSION=${IMAGE_VERSION}" \
         --build-arg="NV_USERNAME=${NV_USERNAME}" \
         --build-arg="NV_CUDA_VERSION_NUMBER=${NV_CUDA_VERSION_NUMBER}" \

@@ -17,8 +17,8 @@ FROM base as base-amd64
 
 ARG USERNAME=devuser
 ARG IN_CUDA_VERSION_NUMBER=11.7
-ARG UID=${UID}
-ARG GID=${GID}
+ARG UID=${UID_VAR}
+ARG GID=${GID_VAR}
 
 ARG PROJECT_NAME=custom-general-user
 
