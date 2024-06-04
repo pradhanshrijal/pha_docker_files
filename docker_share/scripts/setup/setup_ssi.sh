@@ -31,5 +31,6 @@ cd pha_docker_files
 if [[ -z "${PHA_HOME}" ]]; then
   echo "# PHA" >> /home/${USER}/.bashrc
   echo "source ${PHA_PARENT}/pha_docker_files/docker_share/scripts/setup/export_pha.sh" >> /home/${USER}/.bashrc
+  source /home/${USER}/.bashrc
 fi
 #
