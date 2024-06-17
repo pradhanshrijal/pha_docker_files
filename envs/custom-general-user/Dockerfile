@@ -34,8 +34,8 @@ ARG IN_ROS_VERSION=humble
 #
 
 # Update System
-RUN apt update && apt upgrade -y
-RUN apt install sudo
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install sudo
 #
 
 # Create new user and home directory

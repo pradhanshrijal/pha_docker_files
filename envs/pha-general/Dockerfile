@@ -42,8 +42,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #
 
 # Update and install sudo
-RUN apt update && apt upgrade -y
-RUN apt install sudo -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install sudo -y
 #
 
 # Setup user

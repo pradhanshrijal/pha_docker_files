@@ -5,7 +5,7 @@ version: '3'
 
 services:
   pha-user:
-    image: ${CUSTOM_NAME}:${CUSTOM_TAG}
+    image: ${DOC_IMG}:${DOC_TAG}
     build: 
       context: ../.
       dockerfile: ${DOCKERFILE_PATH}

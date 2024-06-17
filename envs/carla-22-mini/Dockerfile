@@ -45,8 +45,8 @@ ARG NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
 #
 
 # Update and install sudo
-RUN apt update && apt upgrade -y
-RUN apt install sudo -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install sudo -y
 #
 
 # Setup user
