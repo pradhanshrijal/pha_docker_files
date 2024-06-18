@@ -13,7 +13,7 @@ services:
       args:
         - IMAGE_NAME=${IMAGE_NAME}
         - IMAGE_VERSION=${IMAGE_VERSION}
-        - USERNAME=${IN_USERNAME}
+        - IN_USERNAME=${IN_USERNAME}
         - IN_CUDA_VERSION_NUMBER=${IN_CUDA_VERSION_NUMBER}
         - UID=${UID_VAR}
         - GID=${GID_VAR}
