@@ -7,7 +7,7 @@ services:
   pha-user:
     image: ${DOC_IMG}:${DOC_TAG}
     build: 
-      context: ../.
+      context: ${PHA_HOME}
       dockerfile: ${DOCKERFILE_PATH}
       no_cache: true
       args:

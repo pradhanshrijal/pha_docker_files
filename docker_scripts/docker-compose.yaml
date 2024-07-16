@@ -33,7 +33,7 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${SSI_PATH}:/home/pha/docker_share
-      - /media/${USERNAME}:/media/pha
+      - /media/${IN_USERNAME}:/media/pha
       - /dev:/dev
     tty: true
     stdin_open: true
