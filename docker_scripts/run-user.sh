@@ -29,7 +29,7 @@ docker run -d --name ${CONT_NAME} \
                 -v /tmp/.X11-unix:/tmp/.X11-unix \
                 --network host \
                 -v ${SSI_PATH}:/home/${USERNAME}/docker_share \
-                -v /media/${USERNAME}:/media/${USERNAME} \
+                -v /media/${USER}:/media/${USERNAME} \
                 -v /dev:/dev \
                 --gpus all \
                 -it ${DOC_IMG}:${DOC_TAG} /bin/bash

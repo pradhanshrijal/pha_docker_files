@@ -19,10 +19,12 @@ source setup_ssi.sh
 ```
 
 # Usage
-
 Easy sample run with docker compose:
 ```bash
 ./docker_scripts/run-compose.sh
 ```
 
 For full usage see [Scripts-Usage](https://github.com/pradhanshrijal/pha_docker_files/wiki/Scripts-Usage). See [PHA-Images](https://github.com/pradhanshrijal/pha_docker_files/wiki/PHA-Images) for a list of available images.
+
+# License
+`pha_docker_files` is released under the [MIT](LICENSE) License.

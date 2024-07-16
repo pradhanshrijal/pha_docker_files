@@ -15,9 +15,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 FROM ${IMAGE_NAME}:${IMAGE_VERSION} as base
 FROM base as base-amd64
 
-ARG NV_USERNAME=pha
-ARG NV_UBUNTU_VERSION=2204
-ARG NV_CUDA_VERSION_NUMBER=11.7
+ARG IN_USERNAME=pha
+ARG IN_UBUNTU_VERSION=2204
+ARG IN_CUDA_VERSION_NUMBER=11.7
 
 ARG PROJECT_NAME=carla-22-mini
 
@@ -25,13 +25,13 @@ ARG APT_GET_REQUIREMENTS_FILE=apt-get_requirements.txt
 ARG PYTHON_REQUIREMENTS_FILE=python_requirements.txt
 ARG SCRIPT_REQUIREMENTS_FILE=script_requirements.sh
 
-ARG NV_SSI_PATH=/home/${NV_USERNAME}/docker_share
-ARG NV_SCRIPTS_PATH=${NV_SSI_PATH}/scripts
-ARG NV_SOFTWARES_PATH=/home/${NV_USERNAME}/Softwares
+ARG IN_SSI_PATH=/home/${IN_USERNAME}/docker_share
+ARG IN_SCRIPTS_PATH=${IN_SSI_PATH}/scripts
+ARG IN_SOFTWARES_PATH=/home/${IN_USERNAME}/Softwares
 ARG USER_REQUIREMENTS_PATH=envs/${PROJECT_NAME}/requirements_files
 
-ARG NV_ROS_VERSION=humble
-ARG NV_CARLA_VERSION=0.9.15
+ARG IN_ROS_VERSION=humble
+ARG IN_CARLA_VERSION=0.9.15
 # ---------------------------------------------------------
 
 # Declare Time Zone
@@ -40,52 +40,52 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #
 
 # Declare CUDA Environments
-ARG NV_CUDA_VERSION=cuda${NV_CUDA_VERSION_NUMBER}
-ARG NV_CUDA_FOLDER=cuda-${NV_CUDA_VERSION_NUMBER}
+ARG IN_CUDA_VERSION=cuda${IN_CUDA_VERSION_NUMBER}
+ARG IN_CUDA_FOLDER=cuda-${IN_CUDA_VERSION_NUMBER}
 #
 
 # Update and install sudo
-RUN apt update && apt upgrade -y
-RUN apt install sudo -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install sudo -y
 #
 
 # Setup user
 SHELL ["/bin/bash", "-c"]
-RUN ["/bin/bash", "-c", "sudo useradd -m ${NV_USERNAME}"]
-RUN ["/bin/bash", "-c", "sudo usermod -aG sudo ${NV_USERNAME}"]
+RUN ["/bin/bash", "-c", "sudo useradd -m ${IN_USERNAME}"]
+RUN ["/bin/bash", "-c", "sudo usermod -aG sudo ${IN_USERNAME}"]
 
 WORKDIR /home/
-RUN ["/bin/bash", "-c", "sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}"]
-WORKDIR /home/${NV_USERNAME}
-RUN ["/bin/bash", "-c", "sudo chsh -s /bin/bash ${NV_USERNAME}"]
-RUN mkdir ${NV_SSI_PATH}
-RUN mkdir ${NV_SCRIPTS_PATH}
+RUN ["/bin/bash", "-c", "sudo chown -R ${IN_USERNAME}:${IN_USERNAME} /home/${IN_USERNAME}"]
+WORKDIR /home/${IN_USERNAME}
+RUN ["/bin/bash", "-c", "sudo chsh -s /bin/bash ${IN_USERNAME}"]
+RUN mkdir ${IN_SSI_PATH}
+RUN mkdir ${IN_SCRIPTS_PATH}
 
 ## Copy Scripts
-RUN mkdir ${NV_SCRIPTS_PATH}/setup
-COPY docker_share/scripts/setup ${NV_SCRIPTS_PATH}/setup
-RUN mkdir ${NV_SCRIPTS_PATH}/install
-COPY docker_share/scripts/install ${NV_SCRIPTS_PATH}/install
-RUN mkdir ${NV_SCRIPTS_PATH}/tmp
-COPY ${USER_REQUIREMENTS_PATH}/${APT_GET_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
-COPY ${USER_REQUIREMENTS_PATH}/${PYTHON_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
-COPY ${USER_REQUIREMENTS_PATH}/${SCRIPT_REQUIREMENTS_FILE} ${NV_SCRIPTS_PATH}/tmp/
- #RUN mkdir ${NV_SCRIPTS_PATH}/functions
-#COPY docker_share/scripts/functions ${NV_SCRIPTS_PATH}/functions
-#RUN mkdir ${NV_SCRIPTS_PATH}/vars
-#COPY docker_share/scripts/vars ${NV_SCRIPTS_PATH}/vars
-RUN mkdir ${NV_SOFTWARES_PATH}
+RUN mkdir ${IN_SCRIPTS_PATH}/setup
+COPY docker_share/scripts/setup ${IN_SCRIPTS_PATH}/setup
+RUN mkdir ${IN_SCRIPTS_PATH}/install
+COPY docker_share/scripts/install ${IN_SCRIPTS_PATH}/install
+RUN mkdir ${IN_SCRIPTS_PATH}/tmp
+COPY ${USER_REQUIREMENTS_PATH}/${APT_GET_REQUIREMENTS_FILE} ${IN_SCRIPTS_PATH}/tmp/
+COPY ${USER_REQUIREMENTS_PATH}/${PYTHON_REQUIREMENTS_FILE} ${IN_SCRIPTS_PATH}/tmp/
+COPY ${USER_REQUIREMENTS_PATH}/${SCRIPT_REQUIREMENTS_FILE} ${IN_SCRIPTS_PATH}/tmp/
+ #RUN mkdir ${IN_SCRIPTS_PATH}/functions
+#COPY docker_share/scripts/functions ${IN_SCRIPTS_PATH}/functions
+#RUN mkdir ${IN_SCRIPTS_PATH}/vars
+#COPY docker_share/scripts/vars ${IN_SCRIPTS_PATH}/vars
+RUN mkdir ${IN_SOFTWARES_PATH}
 
-RUN sudo cp /root/.bashrc /home/${NV_USERNAME}/.
-RUN echo "source ${NV_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
-RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} /home/${NV_USERNAME}/.bashrc
-RUN sudo chown -R ${NV_USERNAME}:${NV_USERNAME} ${NV_SSI_PATH}
-RUN echo "${NV_USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN sudo cp /root/.bashrc /home/${IN_USERNAME}/.
+RUN echo "source ${IN_SCRIPTS_PATH}/setup/term_disp.sh" >> /root/.bashrc
+RUN sudo chown -R ${IN_USERNAME}:${IN_USERNAME} /home/${IN_USERNAME}/.bashrc
+RUN sudo chown -R ${IN_USERNAME}:${IN_USERNAME} ${IN_SSI_PATH}
+RUN echo "${IN_USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 ##
 
 ## Switch to User
 RUN ["/bin/bash", "-c", "source /root/.bashrc"]
-USER ${NV_USERNAME}
+USER ${IN_USERNAME}
 ##
 
 # End - Setup user
@@ -95,25 +95,25 @@ USER ${NV_USERNAME}
 ## Setup apt-get
 RUN sudo apt-get update
 RUN sudo apt-get install --no-install-recommends -y checkinstall
-RUN xargs sudo apt-get install --no-install-recommends -y < ${NV_SCRIPTS_PATH}/tmp/${APT_GET_REQUIREMENTS_FILE}
+RUN xargs sudo apt-get install --no-install-recommends -y < ${IN_SCRIPTS_PATH}/tmp/${APT_GET_REQUIREMENTS_FILE}
 ##
 
 ## Setup Python
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install -r ${NV_SCRIPTS_PATH}/tmp/${PYTHON_REQUIREMENTS_FILE}
+RUN python3 -m pip install -r ${IN_SCRIPTS_PATH}/tmp/${PYTHON_REQUIREMENTS_FILE}
 ##
 
 # End - Setup Programmes
 
 # Install based on scripts
-WORKDIR ${NV_SOFTWARES_PATH}
-RUN ["/bin/bash", "-c", "source /home/${NV_USERNAME}/.bashrc"]
-RUN ["/bin/bash", "-c", "source ${NV_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
+WORKDIR ${IN_SOFTWARES_PATH}
+RUN ["/bin/bash", "-c", "source /home/${IN_USERNAME}/.bashrc"]
+RUN ["/bin/bash", "-c", "source ${IN_SCRIPTS_PATH}/tmp/${SCRIPT_REQUIREMENTS_FILE}"]
 # End - Install based on scripts
 
 # Remove Cache
-RUN ["/bin/bash", "-c", "rm -rf /home/${NV_USERNAME}/.cache/*"]
-RUN ["/bin/bash", "-c", "rm -rf ${NV_SCRIPTS_PATH}/tmp"]
+RUN ["/bin/bash", "-c", "rm -rf /home/${IN_USERNAME}/.cache/*"]
+RUN ["/bin/bash", "-c", "rm -rf ${IN_SCRIPTS_PATH}/tmp"]
 #
 
-WORKDIR "/home/${NV_USERNAME}"
+WORKDIR "/home/${IN_USERNAME}"

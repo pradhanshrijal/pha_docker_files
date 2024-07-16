@@ -7,9 +7,6 @@ COM_COMMAND="up -d"
 UID_VAR=$(id -u)
 GID_VAR=$(id -g)
 
-export UID_VAR=${UID_VAR}
-export GID_VAR=${GID_VAR}
-
 while getopts b:d:e:g:o: flag
 do
     case "${flag}" in
@@ -21,5 +18,8 @@ do
         *) error "Unexpected option ${flag}" ;;
     esac
 done
+
+export UID_VAR=${UID_VAR}
+export GID_VAR=${GID_VAR}
 
 docker compose --verbose --env-file ${ENV_FILE} -f ${COM_FILE} ${COM_COMMAND}
