@@ -3,7 +3,7 @@
 This package consists of docker files to automate container creation and runs.
 
 # Folder Structure Setup
-See [Bitbucket based setup](docs/bitbucket_setup.md) for alternative usage.
+See [Bitbucket setup](docs/bitbucket_setup.md) for alternative usage.
 
 Setup the recommended folder structure:
 ```bash
