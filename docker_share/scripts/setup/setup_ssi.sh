@@ -6,8 +6,8 @@
 # Variables
 PHA_PARENT=$1
 PHA_PARENT="${PHA_PARENT:=/home/${USER}/schreibtisch}"
-PHA_URL=$2
-PHA_URL="${PHA_URL:=https://github.com/pradhanshrijal/pha_docker_files}"
+PHA_DB=$2
+PHA_DB="${PHA_DB:=github.com}"
 #
 
 # Install Requirements
@@ -25,7 +25,7 @@ fi
 cd $PHA_PARENT
 
 if [ ! -d pha_docker_files ]; then
-  git clone ${PHA_URL} --recursive
+  git clone https://${PHA_DB}/pradhanshrijal/pha_docker_files --recursive
 fi
 
 cd pha_docker_files
