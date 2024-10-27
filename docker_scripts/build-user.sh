@@ -10,10 +10,9 @@ CUSTOM_TAG="custom-${USERNAME}"
 UID_VAR=$(id -u)
 GID_VAR=$(id -g)
 
-while getopts a:d:f:g:i:m:t:u: flag
+while getopts d:f:g:i:m:t:u:z: flag
 do
     case "${flag}" in
-        a) CUSTOM_TAG=${OPTARG};;
         d) UID_VAR=${OPTARG};;
         f) DOCKERFILE_PATH=${OPTARG};;
         g) GID_VAR=${OPTARG};;
@@ -21,6 +20,7 @@ do
         m) CUSTOM_NAME=${OPTARG};;
         t) DOC_TAG=${OPTARG};;
         u) USERNAME=${OPTARG};;
+        z) CUSTOM_TAG=${OPTARG};;
         *) error "Unexpected option ${flag}" ;;
     esac
 done

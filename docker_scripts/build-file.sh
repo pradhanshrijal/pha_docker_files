@@ -7,11 +7,11 @@ PYTHONFILE_NAME="python_requirements.txt"
 APTGETFILE_NAME="apt-get_requirements.txt"
 SCRIPTFILE_NAME="script_requirements.sh"
 
-while getopts i:f:p:q:r:t: flag
+while getopts f:i:p:q:r:t: flag
 do
     case "${flag}" in
-        i) DOC_IMG=${OPTARG};;
         f) DOCKERFILE_PATH=${OPTARG};;
+        i) DOC_IMG=${OPTARG};;
         p) PYTHONFILE_NAME=${OPTARG};;
         q) APTGETFILE_NAME=${OPTARG};;
         r) SCRIPTFILE_NAME=${OPTARG};;
@@ -24,4 +24,4 @@ docker build -t ${DOC_IMG}:${DOC_TAG} -f ${DOCKERFILE_PATH} \
         --build-arg="PYTHON_REQUIREMENTS_FILE=${PYTHONFILE_NAME}" \
         --build-arg="APT_GET_REQUIREMENTS_FILE=${APTGETFILE_NAME}" \
         --build-arg="SCRIPT_REQUIREMENTS_FILE=${SCRIPTFILE_NAME}" \
-        --no-cache .
+        --no-cache ${PHA_HOME}
