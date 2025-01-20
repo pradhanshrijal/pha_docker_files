@@ -31,6 +31,7 @@ show_help(){
     enter:              start and execute an available container
     exec:               execute an active docker container
     flags:              show list of flags for PHA
+    home:               change to the home folder
     images:             list all available docker images
     prune:              docker clean-up
     purge:              remove all docker containers and images
@@ -38,6 +39,7 @@ show_help(){
     purge-imgs:         remvove all docker images
     run:                run a container from environment files
     run-cpu:            run a cpu container from env files
+    ssi:                change to the shared folder
     start:              start an available container
 
 Helper Flags for PHA:
@@ -104,6 +106,10 @@ show_command_help()
         ;;
     run-cpu)
         show_run_cpu_help
+        exit 1
+        ;;
+    start)
+        show_start_help
         exit 1
         ;;
     *)
@@ -319,6 +325,10 @@ case "${PHA_COMMAND}" in
     flags)
         show_flags
         ;;
+    home)
+        cd ${PHA_HOME}
+        exec bash
+        ;;
     images)
         docker images
         ;;
@@ -345,6 +355,13 @@ case "${PHA_COMMAND}" in
         ${PHA_HOME}/docker_scripts/run-cpu-env.sh -d ${UID_VAR} \
                                                 -e ${ENV_FILE} \
                                                 -g ${GID_VAR}
+        ;;
+    ssi)
+        cd ${SSI_PATH}
+        exec bash
+        ;;
+    start)
+        docker start ${CONT_NAME}
         ;;
     *)
         echo "Unknown option: $1"

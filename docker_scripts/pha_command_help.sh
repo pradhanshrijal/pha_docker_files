@@ -181,3 +181,16 @@ options:
 Helper Flags for PHA:
     -h | --help         show this information page"
 }
+
+show_start_help()
+{
+    echo "usage: pha start -c [CONT_NAME]
+
+Start a container.
+
+options:
+    -c | --contname     container name to execute
+
+Helper Flags for PHA:
+    -h | --help         show this information page"
+}
