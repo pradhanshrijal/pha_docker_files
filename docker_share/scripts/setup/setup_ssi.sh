@@ -11,7 +11,7 @@ PHA_DB="${PHA_DB:=github.com}"
 #
 
 # Install Requirements
-sudo apt-get install python3 python3-pip -y
+sudo apt-get install python3 python3-pip x11-xserver-utils -y
 python3 -m pip install gdown
 #
 
