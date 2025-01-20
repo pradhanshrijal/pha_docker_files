@@ -40,6 +40,6 @@ docker build -t ${DOC_IMG}:${DOC_TAG} -f ${DOCKERFILE_PATH} \
         --build-arg="IN_SOFTWARES_PATH=${IN_SOFTWARES_PATH}" \
         --build-arg="USER_REQUIREMENTS_PATH=${USER_REQUIREMENTS_PATH}" \
         --build-arg="IN_ROS_VERSION=${IN_ROS_VERSION}" \
-        --no-cache .
+        --no-cache ${PHA_HOME}
 
 set +a
