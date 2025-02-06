@@ -1,6 +1,5 @@
 *
 !.gitignore
-!driving_stacks
 !pha_addons
 !ros_pkgs
 !simulators

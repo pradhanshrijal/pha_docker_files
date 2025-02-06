@@ -152,6 +152,32 @@ Helper Flags for PHA:
     -h | --help         show this information page"
 }
 
+show_rm_help()
+{
+    echo "usage: pha rm -c [CONT_NAME]
+
+Remove a stopped a container.
+
+options:
+    -c | --contname     container name to execute
+
+Helper Flags for PHA:
+    -h | --help         show this information page"
+}
+
+show_rm_image_help()
+{
+    echo "usage: pha rm-image -j [IMG_NAME]
+
+Remove an image.
+
+options:
+    -j | --imagename     image name to execute
+
+Helper Flags for PHA:
+    -h | --help         show this information page"
+}
+
 show_run_help()
 {
     echo "usage: pha run -d [UID_VAR] -e [ENV_FILE] -g [GID_VAR]
@@ -187,6 +213,19 @@ show_start_help()
     echo "usage: pha start -c [CONT_NAME]
 
 Start a container.
+
+options:
+    -c | --contname     container name to execute
+
+Helper Flags for PHA:
+    -h | --help         show this information page"
+}
+
+show_stop_help()
+{
+    echo "usage: pha stop -c [CONT_NAME]
+
+Stop a container.
 
 options:
     -c | --contname     container name to execute

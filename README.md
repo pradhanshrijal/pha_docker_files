@@ -2,6 +2,9 @@
 
 This package consists of docker files to automate container creation and runs.
 
+**Highlights**
+- `PHA` is version `0.2.3` (2024.02).
+
 # Folder Structure Setup
 See [Bitbucket setup](docs/bitbucket_setup.md) for alternative usage.
 

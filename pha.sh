@@ -24,6 +24,7 @@ show_help(){
     echo "Commands for PHA:
 
     active:             list all active contianers
+    addons:             change to addons folder
     build:              build based on environmental files
     build-file:         build a Dockerfile with scripts
     compose:            user compose-file for pha setup
@@ -36,11 +37,16 @@ show_help(){
     prune:              docker clean-up
     purge:              remove all docker containers and images
     purge-cont:         remove all docker containers
-    purge-imgs:         remvove all docker images
+    purge-imgs:         remove all docker images
+    rm:                 remove a stopped container
+    rm-image:           remove an image
+    ros-pkgs:           change to ros packages folder
     run:                run a container from environment files
     run-cpu:            run a cpu container from env files
+    simulators:         change to simulators folder
     ssi:                change to the shared folder
     start:              start an available container
+    stop:               stop an active container
 
 Helper Flags for PHA:
     -h | --help         show this information page
@@ -100,6 +106,14 @@ show_command_help()
         show_purge_imgs_help
         exit 1
         ;;
+    rm)
+        show_rm_help
+        exit 1
+        ;;
+    rm-image)
+        show_rm_image_help
+        exit 1
+        ;;
     run)
         show_run_help
         exit 1
@@ -110,6 +124,10 @@ show_command_help()
         ;;
     start)
         show_start_help
+        exit 1
+        ;;
+    stop)
+        show_stop_help
         exit 1
         ;;
     *)
@@ -133,6 +151,7 @@ show_flags(){
     -g | --gid          variable for the GID value
     -h | --help         show this information page
     -i | --image        docker image name to be used as base
+    -j | --imagename    full docker image name [image:tag]
     -o | --compcmd      compose command | up -d | down | start | stop |
     -p | --pythonfile   absolute file path for python list to be installed
     -q | --aptgetfile   absolute file path for apt-get list to be installed
@@ -227,6 +246,15 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             ;;
+        -j|--imagename)
+            if [[ -n "$2" ]]; then
+                IMG_NAME="$2"
+                shift
+            else
+                echo "Error: -j | --imagename requires a value."
+                exit 1
+            fi
+            ;;
         -o|--compcmd)
             if [[ -n "$2" ]]; then
                 COM_COMMAND="$2"
@@ -293,6 +321,10 @@ case "${PHA_COMMAND}" in
     active)
         docker ps ${ADDON_COMMAND}
         ;;
+    addons)
+        cd ${ADDONS_PHA}
+        exec bash
+        ;;
     build)
         ${PHA_HOME}/build.sh -d ${UID_VAR} \
                                 -e ${ENV_FILE} \
@@ -346,6 +378,16 @@ case "${PHA_COMMAND}" in
         docker rm -f $(docker ps -a -q)
         docker image remove -f $(docker images -a -q)
         ;;
+    rm)
+        docker rm ${CONT_NAME}
+        ;;
+    rm-image)
+        docker rm-image ${IMG_NAME}
+        ;;
+    ros-pkgs)
+        cd ${ROS_PHA}
+        exec bash
+        ;;
     run)
         ${PHA_HOME}/docker_scripts/run-env.sh -d ${UID_VAR} \
                                             -e ${ENV_FILE} \
@@ -356,12 +398,19 @@ case "${PHA_COMMAND}" in
                                                 -e ${ENV_FILE} \
                                                 -g ${GID_VAR}
         ;;
+    simulators)
+        cd ${SIMULATORS_PHA}
+        exec bash
+        ;;
     ssi)
         cd ${SSI_PATH}
         exec bash
         ;;
     start)
         docker start ${CONT_NAME}
+        ;;
+    stop)
+        docker stop ${CONT_NAME}
         ;;
     *)
         echo "Unknown option: $1"
