@@ -14,5 +14,5 @@ cd pha_docker_files
 This can also be done with a script:
 ```bash
 wget https://bitbucket.org/pradhanshrijal/pha_docker_files/raw/main/docker_share/scripts/setup/setup_ssi.sh
-source setup_ssi.sh /home/${USER}/schreibtisch bitbucket.org
+source true setup_ssi.sh /home/${USER}/schreibtisch bitbucket.org
 ```
