@@ -10,7 +10,7 @@ options:
     -a | --addon        addon commands i.e. '--size'
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_build_help()
@@ -25,7 +25,7 @@ options:
     -g | --gid          variable for the GID value
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_build_file_help()
@@ -43,7 +43,7 @@ options:
     -t | --tag          docker tag name to be used for base image
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_compose_help()
@@ -60,7 +60,7 @@ options:
     -o | --compcmd      compose command | up -d | down | start | stop |
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_containers_help()
@@ -73,12 +73,12 @@ options:
     -a | --addon        addon commands i.e. '--size'
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_enter_help()
 {
-    echo "usage: pha enter -c [CONT_NAME]
+    echo "usage: pha enter -c [CONT_NAME] | pha enter [CONT_NAME]
 
 Start and execute an available container.
 
@@ -86,7 +86,7 @@ options:
     -c | --contname     container name to enter
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_exec_help()
@@ -99,7 +99,7 @@ options:
     -c | --contname     container name to execute
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_images_help()
@@ -109,7 +109,7 @@ show_images_help()
 List all available images.
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_prune_help()
@@ -119,7 +119,7 @@ show_prune_help()
 Clean-up. Remove all stopped docker containers and dangling images.
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_purge_help()
@@ -129,7 +129,7 @@ show_purge_help()
 Remove all docker containers and images.
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_purge_cont_help()
@@ -139,7 +139,7 @@ show_purge_cont_help()
 Remove all docker containers.
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_purge_imgs_help()
@@ -149,12 +149,25 @@ show_purge_imgs_help()
 Remove all docker images and associated containers.
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
+}
+
+show_restart_help()
+{
+    echo "usage: pha restart -c [CONT_NAME] | pha restart [CONT_NAME]
+
+Restart a container.
+
+options:
+    -c | --contname     container name to execute
+
+Helper Flags for PHA:
+    -h | --help         show the information page"
 }
 
 show_rm_help()
 {
-    echo "usage: pha rm -c [CONT_NAME]
+    echo "usage: pha rm -c [CONT_NAME] | pha rm [CONT_NAME] 
 
 Remove a stopped a container.
 
@@ -162,12 +175,12 @@ options:
     -c | --contname     container name to execute
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_rm_image_help()
 {
-    echo "usage: pha rm-image -j [IMG_NAME]
+    echo "usage: pha rm-image -j [IMG_NAME] | pha rm-image [IMG_NAME]
 
 Remove an image.
 
@@ -175,7 +188,7 @@ options:
     -j | --imagename     image name to execute
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_run_help()
@@ -190,7 +203,7 @@ options:
     -g | --gid          variable for the GID value
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_run_cpu_help()
@@ -205,12 +218,12 @@ options:
     -g | --gid          variable for the GID value
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_start_help()
 {
-    echo "usage: pha start -c [CONT_NAME]
+    echo "usage: pha start -c [CONT_NAME] | pha start [CONT_NAME]
 
 Start a container.
 
@@ -218,12 +231,12 @@ options:
     -c | --contname     container name to execute
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }
 
 show_stop_help()
 {
-    echo "usage: pha stop -c [CONT_NAME]
+    echo "usage: pha stop -c [CONT_NAME] | pha stop [CONT_NAME]
 
 Stop a container.
 
@@ -231,5 +244,5 @@ options:
     -c | --contname     container name to execute
 
 Helper Flags for PHA:
-    -h | --help         show this information page"
+    -h | --help         show the information page"
 }

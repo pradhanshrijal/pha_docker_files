@@ -4,15 +4,19 @@
 # Sample: source setup_cwr.sh /home/pha/schreibtisch
 
 # Variables
-PHA_PARENT=$1
+SUDO_ACC=$1
+SUDO_ACC="${SUDO_ACC:=true}"
+PHA_PARENT=$2
 PHA_PARENT="${PHA_PARENT:=/home/${USER}/schreibtisch}"
-PHA_DB=$2
+PHA_DB=$3
 PHA_DB="${PHA_DB:=github.com}"
 #
 
 # Install Requirements
-sudo apt-get install git git-lfs python3 python3-pip x11-xserver-utils -y
-python3 -m pip install gdown==4.6.1
+if [ "$SUDO_ACC" = "true" ]; then
+  sudo apt-get install git git-lfs python3 python3-pip x11-xserver-utils -y
+  python3 -m pip install gdown==4.6.1
+fi
 #
 
 # Parent Folder

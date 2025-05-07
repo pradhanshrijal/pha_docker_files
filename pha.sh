@@ -38,6 +38,7 @@ show_help(){
     purge:              remove all docker containers and images
     purge-cont:         remove all docker containers
     purge-imgs:         remove all docker images
+    restart:            restart a container
     rm:                 remove a stopped container
     rm-image:           remove an image
     ros-pkgs:           change to ros packages folder
@@ -104,6 +105,10 @@ show_command_help()
         ;;
     purge-imgs)
         show_purge_imgs_help
+        exit 1
+        ;;
+    restart)
+        show_restart_help
         exit 1
         ;;
     rm)
@@ -302,9 +307,11 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
         echo "Unknown flag: $1"
-        echo ""
-        show_flags
-        exit 1
+        echo "Set as input"
+        IMG_NAME="$1"
+        CONT_NAME="$1"
+        #show_flags
+        #exit 1
         ;;
     esac
     shift
@@ -378,11 +385,14 @@ case "${PHA_COMMAND}" in
         docker rm -f $(docker ps -a -q)
         docker image remove -f $(docker images -a -q)
         ;;
+    restart)
+        docker restart ${CONT_NAME}
+        ;;
     rm)
         docker rm ${CONT_NAME}
         ;;
     rm-image)
-        docker rm-image ${IMG_NAME}
+        docker image rm ${IMG_NAME}
         ;;
     ros-pkgs)
         cd ${ROS_PHA}
