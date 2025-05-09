@@ -112,6 +112,19 @@ Helper Flags for PHA:
     -h | --help         show the information page"
 }
 
+show_init_help()
+{
+    echo "usage: pha init -k [INIT_ADDON] | pha init [INIT_ADDON] | pha init
+
+Initialize a PHA component.
+
+options:
+    -k | --initpath     path to PHA component
+
+Helper Flags for PHA:
+    -h | --help         show the information page"
+}
+
 show_prune_help()
 {
     echo "usage: pha prune
@@ -216,6 +229,19 @@ options:
     -d | --uid          variable for the UID value
     -e | --env          absolute path to the environment file
     -g | --gid          variable for the GID value
+
+Helper Flags for PHA:
+    -h | --help         show the information page"
+}
+
+show_script_help()
+{
+    echo "usage: pha script -s [INITSCRIPT_NAME] | pha script [INITSCRIPT_NAME]
+
+Initialize a script.
+
+options:
+    -s | --initscript   initialization script for PHA
 
 Helper Flags for PHA:
     -h | --help         show the information page"

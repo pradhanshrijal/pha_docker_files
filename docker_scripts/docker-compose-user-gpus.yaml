@@ -27,7 +27,7 @@ services:
         - IN_ROS_VERSION=${IN_ROS_VERSION}
     container_name: ${CONT_NAME}
     env_file:
-      - compose-file.env
+      - ${PHA_ENV_FILE}.env
     network_mode: host
     runtime: nvidia
     privileged: true

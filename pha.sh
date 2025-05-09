@@ -9,6 +9,7 @@ PYTHONFILE_NAME="python_requirements.txt"
 APTGETFILE_NAME="apt-get_requirements.txt"
 SCRIPTFILE_NAME="script_requirements.sh"
 
+INITSCRIPT_NAME=""
 ENV_FILE="${PHA_HOME}/envs/pha-22/pha-22.env"
 COM_FILE="docker_scripts/docker-compose.yaml"
 COM_COMMAND="up -d"
@@ -17,6 +18,7 @@ UID_VAR=$(id -u)
 GID_VAR=$(id -g)
 
 ADDON_COMMAND=""
+INIT_ADDON="pha_init.sh"
 PHA_COMMAND=""
 CURRENT_DIR="${PWD}"
 
@@ -34,6 +36,7 @@ show_help(){
     flags:              show list of flags for PHA
     home:               change to the home folder
     images:             list all available docker images
+    init:               initialize a PHA component
     prune:              docker clean-up
     purge:              remove all docker containers and images
     purge-cont:         remove all docker containers
@@ -44,6 +47,7 @@ show_help(){
     ros-pkgs:           change to ros packages folder
     run:                run a container from environment files
     run-cpu:            run a cpu container from env files
+    script:             run initialization script for PHA
     simulators:         change to simulators folder
     ssi:                change to the shared folder
     start:              start an available container
@@ -51,6 +55,7 @@ show_help(){
 
 Helper Flags for PHA:
     -h | --help         show this information page
+    -l | --list         show the list of PHA components
     -v | --version      show the version number of PHA
     
 For command instructions: pha {COMMAND} -h"
@@ -91,6 +96,10 @@ show_command_help()
         show_images_help
         exit 1
         ;;
+    init)
+        show_init_help
+        exit 1
+        ;;
     prune)
         show_prune_help
         exit 1
@@ -127,6 +136,10 @@ show_command_help()
         show_run_cpu_help
         exit 1
         ;;
+    script)
+        show_script_help
+        exit 1
+        ;;
     start)
         show_start_help
         exit 1
@@ -157,10 +170,13 @@ show_flags(){
     -h | --help         show this information page
     -i | --image        docker image name to be used as base
     -j | --imagename    full docker image name [image:tag]
+    -k | --initpath     path to PHA component
+    -l | --list         show the list of PHA components
     -o | --compcmd      compose command | up -d | down | start | stop |
     -p | --pythonfile   absolute file path for python list to be installed
     -q | --aptgetfile   absolute file path for apt-get list to be installed
     -r | --scriptfile   absolute file path for script based installation
+    -s | --initscript   initialization script for PHA
     -t | --tag          docker tag name to be used for base image
     -v | --version      show the version number of PHA
     "
@@ -260,6 +276,15 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             ;;
+        -k|--initpath)
+            if [[ -n "$2" ]]; then
+                INIT_ADDON="$2/$INIT_ADDON"
+                shift
+            else
+                echo "Error: -k | --initpath requires a value."
+                exit 1
+            fi
+            ;;
         -o|--compcmd)
             if [[ -n "$2" ]]; then
                 COM_COMMAND="$2"
@@ -296,6 +321,15 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             ;;
+        -s|--initscript)
+            if [[ -n "$2" ]]; then
+                INITSCRIPT_NAME="$2"
+                shift
+            else
+                echo "Error: -s | --initscript requires a value."
+                exit 1
+            fi
+            ;;
         -t|--tag)
             if [[ -n "$2" ]]; then
                 DOC_TAG="$2"
@@ -310,6 +344,7 @@ while [[ $# -gt 0 ]]; do
         echo "Set as input"
         IMG_NAME="$1"
         CONT_NAME="$1"
+        INIT_ADDON="$1/$INIT_ADDON"
         #show_flags
         #exit 1
         ;;
@@ -321,6 +356,9 @@ done
 case "${PHA_COMMAND}" in
     -h|--help)
         show_help
+        ;;
+    -l|--list)
+        printenv | grep PHA
         ;;
     -v|--version)
         echo ${PHA_VERSION}
@@ -367,9 +405,13 @@ case "${PHA_COMMAND}" in
     home)
         cd ${PHA_HOME}
         exec bash
+        echo ${PHA_HOME}
         ;;
     images)
         docker images
+        ;;
+    init)
+        ${INIT_ADDON}
         ;;
     prune)
         docker system prune
@@ -397,6 +439,7 @@ case "${PHA_COMMAND}" in
     ros-pkgs)
         cd ${ROS_PHA}
         exec bash
+        echo ${ROS_PHA}
         ;;
     run)
         ${PHA_HOME}/docker_scripts/run-env.sh -d ${UID_VAR} \
@@ -408,13 +451,18 @@ case "${PHA_COMMAND}" in
                                                 -e ${ENV_FILE} \
                                                 -g ${GID_VAR}
         ;;
+    script)
+        ${INITSCRIPT_NAME}
+        ;;
     simulators)
         cd ${SIMULATORS_PHA}
         exec bash
+        echo ${SIMULATORS_PHA}
         ;;
     ssi)
         cd ${SSI_PATH}
         exec bash
+        echo ${SSI_PATH}
         ;;
     start)
         docker start ${CONT_NAME}
