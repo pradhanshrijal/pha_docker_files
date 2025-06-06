@@ -4,7 +4,7 @@
 version: '3'
 
 services:
-  pha-user:
+  pha-cpu:
     image: ${DOC_IMG}:${DOC_TAG}
     build: 
       context: ${PHA_HOME}
@@ -13,10 +13,10 @@ services:
       args:
         - IMAGE_NAME=${IMAGE_NAME}
         - IMAGE_VERSION=${IMAGE_VERSION}
-        - USERNAME=${IN_USERNAME}
+        - IN_USERNAME=${IN_USERNAME}
         - IN_CUDA_VERSION_NUMBER=${IN_CUDA_VERSION_NUMBER}
-        - UID=${UID}
-        - GID=${GID}
+        - UID=${UID_VAR}
+        - GID=${GID_VAR}
         - PROJECT_NAME=${PROJECT_NAME}
         - APT_GET_REQUIREMENTS_FILE=${APT_GET_REQUIREMENTS_FILE}
         - PYTHON_REQUIREMENTS_FILE=${PYTHON_REQUIREMENTS_FILE}
@@ -27,7 +27,7 @@ services:
         - IN_ROS_VERSION=${IN_ROS_VERSION}
     container_name: ${CONT_NAME}
     env_file:
-      - compose-file.env
+      - ${PHA_ENV_FILE}.env
     network_mode: host
     privileged: true
     environment:
