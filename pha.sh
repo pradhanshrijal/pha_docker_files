@@ -404,8 +404,8 @@ case "${PHA_COMMAND}" in
         ;;
     home)
         cd ${PHA_HOME}
-        exec bash
         echo ${PHA_HOME}
+        exec bash
         ;;
     images)
         docker images
@@ -438,8 +438,8 @@ case "${PHA_COMMAND}" in
         ;;
     ros-pkgs)
         cd ${ROS_PHA}
-        exec bash
         echo ${ROS_PHA}
+        exec bash
         ;;
     run)
         ${PHA_HOME}/docker_scripts/run-env.sh -d ${UID_VAR} \
@@ -456,13 +456,13 @@ case "${PHA_COMMAND}" in
         ;;
     simulators)
         cd ${SIMULATORS_PHA}
-        exec bash
         echo ${SIMULATORS_PHA}
+        exec bash
         ;;
     ssi)
         cd ${SSI_PATH}
-        exec bash
         echo ${SSI_PATH}
+        exec bash
         ;;
     start)
         docker start ${CONT_NAME}

@@ -28,3 +28,8 @@ source ${IN_SSI_PATH}/scripts/install/install_ros.sh ${IN_USERNAME} ${IN_ROS_VER
 
 # Source Conda
 # echo "# source ${IN_SSI_PATH}/scripts/start_conda_local.sh" >> /home/${IN_USERNAME}/.bashrc
+
+# Set tmux
+cd /home/${IN_USERNAME}
+touch .tmux.conf
+echo 'set-option -g default-shell "/bin/bash"' >> .tmux.conf
