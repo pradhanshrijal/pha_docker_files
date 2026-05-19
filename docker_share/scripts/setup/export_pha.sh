@@ -11,4 +11,4 @@ export PHA_VERSION=$PHA_VERSION
 alias pha="${PHA_HOME}/pha.sh"
 source ${SSI_PATH}/scripts/setup/term_disp.sh
 
-xhost +local:docker
+#xhost +local:docker
